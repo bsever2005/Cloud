@@ -1,0 +1,32 @@
+/etc/systemd/system/tomcat.service
+[Unit]
+Description=Apache Tomcat Web Application Container
+Wants=network.target
+After=network.target
+
+[Service]
+Type=forking
+
+#Environment=JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.342.b07-2.el8_6.x86_64/jre
+
+#Environment=JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.352.b08-2.el8_7.x86_64/
+
+Environment=JAVA_HOME=/usr/lib/jvm/jre-1.8.0-openjdk-1.8.0.372.b07-1.el8_7.x86_64/
+
+Environment=CATALINA_PID=/opt/tomcat/temp/tomcat.pid
+Environment=CATALINA_HOME=/opt/tomcat
+Environment='CATALINA_OPTS=-Xms512M -Xmx1G -Djava.net.preferIPv4Stack=true'
+Environment='JAVA_OPTS=-Xms128m -Xmx1g -XX:MaxPermSize=128m -XX:+UseCompressedOops -XX:+AggressiveOpts -XX:+UseLargePages -XX:LargePageSizeInBytes=2m -XX:+UseConcMarkSweepGC -XX:+UseParNewGC -XX:ParallelGCThreads=4 -Dspring.profiles.active=prod -Dvip.mail.admin.config.dir=/opt/tomcat-config/vipmail-admin -Djava.net.preferIPv4Stack=true'
+
+ExecStart=/opt/tomcat/bin/startup.sh
+ExecStop=/opt/tomcat/bin/shutdown.sh
+SuccessExitStatus=143
+
+User=mailadm
+Group=mailadm
+UMask=0007
+RestartSec=10
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
